@@ -4,10 +4,10 @@ This POC (Proof of Concept) is a technical demonstration of a method to bypass t
 
 How it works:
 1. Delivery of PE file via TCP:
-- A PE file (Portable Executable format executable file) is a program module that can be executed by the system.
-- The file is transmitted over the network via TCP protocol to avoid detection during transmission using encryption or data concealment.
+  - A PE file (Portable Executable format executable file) is a program module that can be executed by the system.
+  - The file is transmitted over the network via TCP protocol to avoid detection during transmission using encryption or data concealment.
 2. Execution of the file in memory:
-- After successful transfer of a PE file, execution of the file is performed directly in the system's memory, bypassing the step of saving to disk.
+  - After successful transfer of a PE file, execution of the file is performed directly in the system's memory, bypassing the step of saving to disk.
 
 
 This POC is not intended for malicious use, but rather to illustrate potential threats and weaknesses in existing defenses in order to improve security and develop more effective security measures.
