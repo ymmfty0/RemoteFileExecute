@@ -22,3 +22,17 @@ Compiler: Microsoft (R) C/C++ version 19.37.32822 for x64
 Windows Version:
 
 Edition Windows 11 Pro Version 22H2 OS build 22621.1702 Experience Windows Feature Experience Pack 1000.22641.1000.0
+
+# Usage 
+
+To use it, we first need to compile the project using Visual Studio
+
+Then run the python script on our server
+
+```python
+python server.py --lport 4443 --pe havoc.exe
+```
+
+After that we upload our compiled exe file to the victim machine. 
+
+Wait for execution.
