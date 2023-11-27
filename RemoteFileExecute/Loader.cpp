@@ -65,6 +65,7 @@ void Loader::Execute(LPBYTE buff)
 
 	ctx->ContextFlags = CONTEXT_FULL;
 
+
 	if (!GetThreadContext(pi.hThread, ctx)){
 		DWORD error = GetLastError();
 		printf("[!] GetThreadContext end with error %lu\n", error);
